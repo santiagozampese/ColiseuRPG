@@ -1,4 +1,4 @@
-﻿public static class Program
+public static class Program
 { 
     private static Random r = EntityManager.r;    
 

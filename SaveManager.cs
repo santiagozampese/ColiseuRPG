@@ -1,4 +1,4 @@
-using System.Text.Json;
+using Newtonsoft.Json;
 
 public static class SaveManager
 {   
@@ -26,10 +26,12 @@ public static class SaveManager
     public static bool IsReseting { get; set; } = false;
     public static bool IsLoading { get; set; } = false;
     private static string SavePath = ".savegame.json";
-    private static JsonSerializerOptions options = new()
+    private static JsonSerializerSettings options = new()
     {
-        WriteIndented = true,
-        IncludeFields = true
+        Formatting = Formatting.Indented,
+        NullValueHandling = NullValueHandling.Ignore,
+        TypeNameHandling = TypeNameHandling.None
+
     };
 
     public static void SaveGame(Player player)
@@ -83,7 +85,7 @@ public static class SaveManager
             }
         }
 
-        string json = JsonSerializer.Serialize(save, options);
+        string json = JsonConvert.SerializeObject(save, options);
         File.WriteAllText(SavePath, json);
 
         IsSaving=false; 
@@ -98,7 +100,7 @@ public static class SaveManager
         IsLoading=true;
 
         string json = File.ReadAllText(SavePath);
-        GameSave? save = JsonSerializer.Deserialize<GameSave>(json);
+        GameSave? save = JsonConvert.DeserializeObject<GameSave>(json, options);
 
         if (save == null) return false;
 
