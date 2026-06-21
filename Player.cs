@@ -29,8 +29,6 @@ public class Player : Entity
 
         EntityManager.AddEntity(this);
 
-        EntityManager.player = this;
-
     }
 
     public override void Die()
@@ -58,87 +56,98 @@ public class Player : Entity
         }
 
     }
-    public void Walk()
+    public void Walk(ConsoleKey key)
     {
         // Walk in direction of the key pressed
-        if (this.CanWalk)
-        {          
-            switch (char.ToLower(Console.ReadKey().KeyChar))
-            {
-                case 'w':
-                    this.GoUp();
-                    break;
 
-                case 's':
-                    this.GoDown();
-                    break;
-                
-                case 'd':
-                    this.GoRight();
-                    break;
+        if (!this.CanWalk) return;
 
-                case 'a':
-                    this.GoLeft();
-                    break;
-            }
+
+        switch (key)
+        {
+            case ConsoleKey.W:
+                this.GoUp();
+                break;
+
+            case ConsoleKey.S:
+                this.GoDown();
+                break;
+
+            case ConsoleKey.D:
+                this.GoRight();
+                break;
+
+            case ConsoleKey.A:
+                this.GoLeft();
+                break;
+
+            default:
+                break;
         }
     }
 
-    public void Attack()
-    {   // Attack in the pressed direction
-        switch (char.ToLower(Console.ReadKey().KeyChar))
-        {
-            case 'w':
-                foreach (Enemy enemy in EntityManager.EnemyList)
-                {
-                    if (EntityManager.VerifyUp(this, enemy, 1))
-                    {
-                        enemy.Life-=this.Damage;
-                        AttackSamePos(enemy);
-                    }
-                }
-                break;
-
-            case 's':
-                foreach (Enemy enemy in EntityManager.EnemyList)
-                {
-                    if (EntityManager.VerifyDown(this, enemy, 1))
-                    {
-                        enemy.Life-=this.Damage;
-                        AttackSamePos(enemy);
-                    }        
-                }
-                break;
-            
-            case 'd':
-                foreach (Enemy enemy in EntityManager.EnemyList)
-                {
-                    if (EntityManager.VerifyRight(this, enemy, 1))
-                    {
-                        enemy.Life-=this.Damage;
-                        AttackSamePos(enemy);
-                    }
-                }
-                break;
-
-            case 'a':
-                foreach (Enemy enemy in EntityManager.EnemyList)
-                {
-                    if (EntityManager.VerifyLeft(this, enemy, 1))
-                    {
-                        enemy.Life-=this.Damage;
-                        AttackSamePos(enemy);
-                    }
-                }
-                break;
-        }
-
-        void AttackSamePos(Enemy enemy)
+    public void Attack(ConsoleKey key)
+    {   
+        // Attack in the pressed direction
+        foreach (Enemy enemy in EntityManager.EnemyList)
         {
             if (enemy.PosX==this.PosX && enemy.PosY==this.PosY)
             {
                 enemy.Life-=this.Damage;
             }
+        }
+        
+        switch (key)
+        {
+            case ConsoleKey.W:
+                foreach (Enemy enemy in EntityManager.EnemyList)
+                {
+                    if (EntityManager.VerifyUp(this, enemy, 1) && !SamePos(enemy))
+                    {
+                        enemy.Life-=this.Damage;
+                    }
+                }
+                break;
+
+            case ConsoleKey.S:
+                foreach (Enemy enemy in EntityManager.EnemyList)
+                {
+                    if (EntityManager.VerifyDown(this, enemy, 1) && !SamePos(enemy))
+                    {
+                        enemy.Life-=this.Damage;
+                    }        
+                }
+                break;
+            
+            case ConsoleKey.D:
+                foreach (Enemy enemy in EntityManager.EnemyList)
+                {
+                    if (EntityManager.VerifyRight(this, enemy, 1) && !SamePos(enemy))
+                    {
+                        enemy.Life-=this.Damage;
+                    }
+                }
+                break;
+
+            case ConsoleKey.A:
+                foreach (Enemy enemy in EntityManager.EnemyList)
+                {
+                    if (EntityManager.VerifyLeft(this, enemy, 1) && !SamePos(enemy))
+                    {
+                        enemy.Life-=this.Damage;
+                    }
+                }
+                break;
+            
+            default:
+                break;
+        }
+
+        bool SamePos(Enemy enemy)
+        {
+            if (enemy.PosX==this.PosX && enemy.PosY==this.PosY) return true;
+            else return false;
+
         }
     }
 }

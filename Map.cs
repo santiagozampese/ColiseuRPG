@@ -3,11 +3,15 @@ public static class Map
     public const int height = 20;
     public const int width = 50;
 
+    public static bool IsMapDraw {get; set;}
+
     public static char theme = '.';
 
     public static void DrawMap()
     {   
         // Draw the map
+        
+        IsMapDraw=false;
 
         Console.Clear();
 
@@ -40,12 +44,16 @@ public static class Map
         }
 
         Console.WriteLine("");
+
+        InfoManager.ShowInfo();
+
+        IsMapDraw=true;
     }
 
     public static char VerifyEntitys(int x, int y)
     {
         // verify the entitys in map and put them in their positions
-
+    
         foreach (var entity in EntityManager.EntityList)
         {   
             if (!entity.isDead)

@@ -18,7 +18,5 @@ public class Goblin : Enemy
 
         Damage = BaseDamage;
 
-        this.SetAttributes();
-        EntityManager.AddNotSpawnedEnemy(this);
     }
 }

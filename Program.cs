@@ -1,99 +1,188 @@
 ﻿public static class Program
-{   
-    public static void Main()
-    {  
-        Random r = EntityManager.r;
+{ 
+    private static Random r = EntityManager.r;    
 
-        Player player = new();
+    public static bool isRunning {get; set;} = false;
 
-        #if DEBUG
-        /*player.Level=10000;
-        player.VerifyLevel();
+    public static void InitConfig()
+    {
+        SaveManager.SetKeys();
+
+        #if DEBUG // Debug settings
+        /*EntityManager.player.Level=10000;
         RoundCreator.CurrentRound=18;*/
         #endif
 
-        RoundCreator.SetLevel();
+        EntityManager.EnemyList.Clear();
+        EntityManager.EntityList.Clear();
+        EntityManager.NotSpawnedEnemys.Clear();
 
-
-        if (player == null)
+        if (EntityManager.player == null)
         {
-            return;
+            EntityManager.player = new Player();
         }
 
-        while (!player.isDead)
+        if (!ThreadingManager.IsActive) ThreadingManager.StartThreads();
+
+        EntityManager.player.PosX=r.Next(0, Map.width);
+        EntityManager.player.PosY=r.Next(0, Map.height);
+
+        EntityManager.player.VerifyLevel();
+        
+        SaveManager.SaveGame(EntityManager.player);
+
+        SaveManager.LoadGame(); // Load the save
+        RoundCreator.SetLevel(); // Prepare the Level
+        RoundCreator.SpawnEnemies();
+
+        Console.Clear();
+        Map.DrawMap();
+    }
+    public static void Main()
+    { 
+        while (true)
+        {   
+            if (!isRunning)
+            {
+                isRunning=true;
+                InitConfig();
+                GameLoop();
+            }
+        }
+    } 
+    public static void GameLoop()
+    {   
+        if (EntityManager.player == null) return;
+
+        while (!EntityManager.player.isDead || !isRunning)
         {
             // Game loop 
 
-            foreach (Enemy enemy in EntityManager.NotSpawnedEnemys)
-            {
-                enemy.Spawn();
-            }    
+            // Reset Save Mode
+            SaveManager.IsSaving=false;
+            SaveManager.IsLoading=false;
+            SaveManager.IsReseting=false;
 
-            player.VerifyDead();
+            EntityManager.player.VerifyDead();
 
-            if (player.isDead)
+            if (EntityManager.player.isDead)
             {
-                player.Die();
+                EntityManager.player.Die();
             }
 
-            player.mode = "Walk";
+            if (EntityManager.player.isDead || !isRunning) break;
+
+            RoundCreator.SpawnEnemies();
+
+            EntityManager.player.mode = "Walk";
 
             Map.DrawMap();
-            InfoManager.ShowInfo();
 
             Console.SetCursorPosition(0, Map.height+(Map.height/2));
 
-            player.Walk();
+            var key = Console.ReadKey(true).Key;
 
-            player.mode = "Attack";
+            CheckSpecialKeys(key);
+
+            EntityManager.player.Walk(key);
+            RoundCreator.SpawnEnemies();
+
+            if (EntityManager.player.isDead || !isRunning) break;
+
+            EntityManager.player.mode = "Attack";
 
             Map.DrawMap();
-            InfoManager.ShowInfo();
 
             Console.SetCursorPosition(0, Map.height+(Map.height/2));
 
-            player.Attack();
+            key = Console.ReadKey(true).Key;
 
+            CheckSpecialKeys(key);
 
-            foreach (Entity entity in EntityManager.EntityList)
-            {
-                entity.VerifyDead();
+            EntityManager.player.Attack(key);
+            RoundCreator.SpawnEnemies();
 
-                if (entity.isDead && entity is Enemy)
-                {   
-                    // Give Xp for enemys Dead
-                    Enemy enemy = (Enemy)entity;
-                    if (enemy.GiveXp)
-                    {                      
-                        player.xp+=(player.xpValue*entity.Level)+enemy.BonusXp;
-                    }
-                }
+            if (EntityManager.player.isDead || !isRunning) break;
 
-                if (entity.isDead)
-                {
-                    entity.Die();
-                }
-            }
+            CheckEnemiesDie();
 
-            player.EnemysHits.Clear();
-            player.DamageReceiveInCurrentTurn=0;
+            EntityManager.player.EnemysHits.Clear();
+            EntityManager.player.DamageReceiveInCurrentTurn=0;
 
             RoundCreator.Turn++;
             
-            player.VerifyLevel();
+            EntityManager.player.VerifyLevel();
 
             RoundCreator.VerifyLevel();
            
-            foreach (Enemy enemy in EntityManager.EnemyList)
+            EnemiesMoves();
+        }
+    } 
+
+    public static void EnemiesMoves()
+    {
+        if (SaveManager.IsLoading || SaveManager.IsSaving || SaveManager.IsReseting) return;
+        
+        foreach (Enemy enemy in EntityManager.EnemyList)
+        {   
+            if (!enemy.isDead)
+            {
+                enemy.Attack();  
+                enemy.Special();
+                enemy.WalkToPlayer();
+            }
+        }  
+    }
+
+    public static void CheckEnemiesDie()
+    {
+        if (SaveManager.IsLoading || SaveManager.IsSaving || SaveManager.IsReseting) return;
+        if (EntityManager.player == null) return;
+
+        foreach (Entity entity in EntityManager.EntityList)
+        {
+            entity.VerifyDead();
+
+            if (entity.isDead && entity is Enemy)
             {   
-                if (!enemy.isDead)
-                {
-                    enemy.Attack();  
-                    enemy.Special();
-                    enemy.WalkToPlayer();
+                // Give Xp for enemys Dead
+                Enemy enemy = (Enemy)entity;
+                if (enemy.GiveXp)
+                {                      
+                    EntityManager.player.xp+=(EntityManager.player.xpValue*entity.Level)+enemy.BonusXp;
                 }
-            }     
+            }
+
+            if (entity.isDead)
+            {
+                entity.Die();
+            }
         }
     }
-    
+
+    public static void CheckSpecialKeys(ConsoleKey key)
+    {
+        if (EntityManager.player==null) return;
+
+        if (key==SaveManager.saveKey)
+        {
+            SaveManager.SaveGame(EntityManager.player);
+            Console.Clear();
+            Map.DrawMap();
+            InfoManager.ShowInfo();
+        }
+        else if (key==SaveManager.loadKey)
+        {
+            SaveManager.LoadGame();
+            Console.Clear();
+            Map.DrawMap();
+            InfoManager.ShowInfo();
+        }
+        else if (key==SaveManager.resetKey)
+        {
+            SaveManager.DeleteSave();
+            Console.Clear();
+            EntityManager.player.Die();
+        }
+    }
 }

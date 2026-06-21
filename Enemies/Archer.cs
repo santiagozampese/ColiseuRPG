@@ -15,9 +15,7 @@ public class Archer : Enemy
         Range = 5;
 
         TotalLife = BaseLife;
-
-        this.SetAttributes();
-        EntityManager.AddNotSpawnedEnemy(this);
+       
     }
 
      public override void WalkToPlayer()

@@ -16,31 +16,49 @@ public static class RoundCreator
     private static RoundedEnemy summoner = new((a, b) => new Summoner{Level=r.Next(a, b)});
     private static RoundedEnemy magnectMage = new((a, b) => new MagnectMage{Level=r.Next(a, b)});
     private static RoundedEnemy jumpingSlime = new((a, b) => new JumpingSlime{Level=r.Next(a, b)});
+    public static bool roundClear = false;
 
-    private static Player? player = EntityManager.player;
     public static void VerifyLevel()
     {   // Go to next round if clear the current round
+
         if (EntityManager.EnemyList.Count==0)
         {
-            CurrentRound++;
-            Turn=1;
-            
             SetLevel();
+            CurrentRound++;
+            Turn=1;   
+            roundClear = true;  
         }
+        
+        if (roundClear) 
+        {
+            SpawnEnemies();
+            roundClear = false;
+        }
+        
+        if (EntityManager.player!=null && roundClear) SaveManager.SaveGame(EntityManager.player); // AutoSave
     }
+
+    public static void SpawnEnemies()
+    {
+        foreach (Enemy enemy in EntityManager.NotSpawnedEnemys)
+        {
+            enemy.Spawn();
+        } 
+    }
+
     public static void SetLevel()
     {   // Create enemys
         ChooseEnemyAmount();
         ChooseEnemys();
-        if (player!=null)
+        
         {
-            if (player.Life+(player.TotalLife*10/100)>player.TotalLife)
+            if (EntityManager.player?.Life+(EntityManager.player?.TotalLife*10/100)>EntityManager.player?.TotalLife)
             {
-                player.Life=player.TotalLife;
+                EntityManager.player.Life=EntityManager.player.TotalLife;
             }
             else
             {
-                player.Life+=player.TotalLife*10/100;
+                EntityManager.player?.Life+=EntityManager.player.TotalLife*10/100;
             }
         }
 
@@ -58,7 +76,7 @@ public static class RoundCreator
                 i++;
             }
         }
-
+  
         foreach (Enemy enemy in EntityManager.EnemyList)
         {
             enemy.SetAttributes();

@@ -6,11 +6,11 @@ public class MagnectMage : Enemy
 
         BonusXp = 30;
 
-        RoundsToAttack = 2;
+        RoundsToAttack = 3;
 
-        RoundsToSpecial=3;
+        RoundsToSpecial=4;
 
-        BaseDamage = 6;
+        BaseDamage = 8;
 
         BaseLife = 50;
 
@@ -21,8 +21,6 @@ public class MagnectMage : Enemy
 
         Damage = BaseDamage;
 
-        this.SetAttributes();
-        EntityManager.AddNotSpawnedEnemy(this);
     }
 
     public override void Special()

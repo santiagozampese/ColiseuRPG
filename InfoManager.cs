@@ -1,19 +1,21 @@
 public static class InfoManager
 {   
-    static Player? player = EntityManager.player;
     public static string? playerInfo;
     public static void ShowInfo()
-    { 
+    {   
+        if (EntityManager.player == null) return;
+
         int? plusHits = 0;
         Func<List<(Enemy enemy, double damage)>, string> HitsString = x =>{
             if (x==null) return "";
-            string? text="Enemys Damage - ";
+            string? text="";
             for (int j=0; j<x.Count; j++)
             {   
                 if (x.Count==0) break;
                 text+=$"{x.ToList()[j].enemy.GetType()} - {x.ToList()[j].damage}\n";
                 if (j>=4) plusHits=x.Count-4;
             }
+            if (text!="") text="Enemys Damage - " + text;
             return text;
         };
 
@@ -24,25 +26,22 @@ public static class InfoManager
 
         };
 
+        
         Console.SetCursorPosition(0, Map.height+4);
 
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-        playerInfo = $"""
-        Life - {(int?)player.Life}       Mode - {player.mode}   Round - {RoundCreator.CurrentRound}   Turn - {RoundCreator.Turn}
-        Damage - {(int?)player.Damage}   Xp - {(int?)player.xp}/{(int?)player.neededXp}    Level - {player.Level}
+        string playerInfo = $"""
+        Life - {(int?)EntityManager.player.Life}       Mode - {EntityManager.player.mode}   Round - {RoundCreator.CurrentRound}   Turn - {RoundCreator.Turn}
+        Damage - {(int?)EntityManager.player.Damage}   Xp - {(int?)EntityManager.player.xp}/{(int?)EntityManager.player.neededXp}    Level - {EntityManager.player.Level}
 
-        Receive Damage - {(int?)player.DamageReceiveInCurrentTurn}
+        Receive Damage - {(int?)EntityManager.player.DamageReceiveInCurrentTurn}
 
-        {HitsString(player.EnemysHits)}
+        {HitsString(EntityManager.player.EnemysHits)}
         {plusHitsString(plusHits)}
         """;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
         Console.WriteLine(playerInfo);
     
-
-
-        if (player==null)
+        if (EntityManager.player==null)
         {
             return;
         }
@@ -61,7 +60,7 @@ public static class InfoManager
                 distance=enemy.SpecialRange;
             }
 
-            if (EntityManager.VerifySides(player, enemy, distance+1))
+            if (EntityManager.VerifySides(EntityManager.player, enemy, distance+1))
             {
                 List<string> enemyInfo = new();
 
