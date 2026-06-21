@@ -1,4 +1,4 @@
-public static class Program
+﻿public static class Program
 { 
     private static Random r = EntityManager.r;    
 
@@ -29,10 +29,14 @@ public static class Program
 
         EntityManager.player.VerifyLevel();
         
+
+        if (!SaveManager.LoadGame()) // Load the save
+        {         
+            RoundCreator.SetLevel(); // Prepare the Level
+        }
+
         SaveManager.SaveGame(EntityManager.player);
 
-        SaveManager.LoadGame(); // Load the save
-        RoundCreator.SetLevel(); // Prepare the Level
         RoundCreator.SpawnEnemies();
 
         Console.Clear();
