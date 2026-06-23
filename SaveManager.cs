@@ -129,8 +129,6 @@ public static class SaveManager
 
         player.VerifyLevel();
 
-        EntityManager.AddEntity(player);
-
         foreach (var enemyData in save.Enemies)
         {
             Enemy enemy = CreateEnemyByType(enemyData);

@@ -27,17 +27,17 @@
         EntityManager.player.PosX=r.Next(0, Map.width);
         EntityManager.player.PosY=r.Next(0, Map.height);
 
-        EntityManager.player.VerifyLevel();
-        
-
         if (!SaveManager.LoadGame()) // Load the save
         {         
+            EntityManager.AddEntity(EntityManager.player);
             RoundCreator.SetLevel(); // Prepare the Level
         }
 
-        SaveManager.SaveGame(EntityManager.player);
+        EntityManager.player.VerifyLevel();
 
         RoundCreator.SpawnEnemies();
+
+        SaveManager.SaveGame(EntityManager.player);
 
         Console.Clear();
         Map.DrawMap();
@@ -54,11 +54,11 @@
             }
         }
     } 
-    public static void GameLoop()
+    public static void GameLoop() 
     {   
         if (EntityManager.player == null) return;
 
-        while (!EntityManager.player.isDead || !isRunning)
+        while (!EntityManager.player.isDead || isRunning)
         {
             // Game loop 
 
