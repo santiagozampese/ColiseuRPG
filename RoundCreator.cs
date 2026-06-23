@@ -32,10 +32,10 @@ public static class RoundCreator
         if (roundClear) 
         {
             SpawnEnemies();
+            if (EntityManager.player!=null) SaveManager.SaveGame(EntityManager.player); // AutoSave
             roundClear = false;
         }
         
-        if (EntityManager.player!=null && roundClear) SaveManager.SaveGame(EntityManager.player); // AutoSave
     }
 
     public static void SpawnEnemies()
