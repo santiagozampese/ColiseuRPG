@@ -34,4 +34,5 @@ public class EnemyData
     public int RoundAttackCount { get; set; }
     public int RoundSpecialCount { get; set; }
     public bool IsChild { get; set; }
+    public bool GiveXp { get; set; }
 }

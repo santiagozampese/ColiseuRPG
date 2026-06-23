@@ -73,7 +73,8 @@ public static class SaveManager
                     PosX = enemy.PosX,
                     PosY = enemy.PosY,
                     RoundAttackCount = enemy.RoundAttackCount,
-                    RoundSpecialCount = enemy.RoundSpecialCount
+                    RoundSpecialCount = enemy.RoundSpecialCount,
+                    GiveXp = enemy.GiveXp
                 };
 
                 if (enemy is JumpingSlime slime)
@@ -128,6 +129,7 @@ public static class SaveManager
         player.isDead=false;
 
         player.VerifyLevel();
+        EntityManager.AddEntity(player);
 
         foreach (var enemyData in save.Enemies)
         {
@@ -138,6 +140,7 @@ public static class SaveManager
             enemy.PosY = enemyData.PosY;
             enemy.RoundAttackCount = enemyData.RoundAttackCount;
             enemy.RoundSpecialCount = enemyData.RoundSpecialCount;
+            enemy.GiveXp = enemyData.GiveXp;
 
             enemy.SetAttributes();
 
