@@ -162,6 +162,8 @@ public static class SaveManager
         IsReseting=true;
         File.Delete(SavePath);
 
+        if (EntityManager.player != null) EntityManager.player.ResetAttributes();
+
         RoundCreator.CurrentRound=1;
         RoundCreator.Turn=1;
 

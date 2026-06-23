@@ -11,7 +11,6 @@ public class Player : Entity
     public Player()
     {     
         Apparence = '@';
-
         Level=1;
 
         xp=0;
@@ -29,6 +28,17 @@ public class Player : Entity
 
         EntityManager.AddEntity(this);
 
+    }
+
+    public void ResetAttributes()
+    {
+        TotalLife = BaseLife;
+        Damage = BaseDamage;
+        isDead = false;
+        Level = 1;
+
+        xp = 0;
+        neededXp = Level*150;
     }
 
     public override void Die()

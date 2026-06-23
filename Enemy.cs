@@ -1,6 +1,8 @@
 public class Enemy : Entity
 {       
     private Random r = EntityManager.r;
+
+    public bool GiveXp {get; set;} = true;
     public int RoundsToAttack {get;set;}
     public int RoundsToSpecial {get;set;}
 

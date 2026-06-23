@@ -1,7 +1,5 @@
 public class Entity
 {   
-
-    public bool GiveXp {get; set;} = true;
     public bool isDead {get; set;} = false;
     public int PosX {get; set;}
     public int PosY {get; set;}
