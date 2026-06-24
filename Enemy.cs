@@ -12,6 +12,7 @@ public class Enemy : Entity
     public double BonusXp {get; set;} = 0;
     public int RoundAttackCount {get; set;}
     public int RoundSpecialCount {get; set;}
+
     public Enemy()
     {
         this.Damage = this.BaseDamage*this.Level;
@@ -62,6 +63,32 @@ public class Enemy : Entity
 
         this.Life = this.TotalLife;
     }
+
+    public override void VerifyDead()
+    {
+        if (Life<=0)
+        {
+            isDead=true;
+            State="Dead";
+            StateColor=ConsoleHelper.Red;
+        }
+
+        if (EntityManager.player==null) return;
+        else if (EntityManager.player.Damage>=Life)
+        {
+            State="LowLife"; 
+            StateColor=ConsoleHelper.Yellow;
+        }
+
+        else
+        {
+            State="Alive";
+            StateColor=ConsoleHelper.White; 
+        }
+
+    }
+    
+
     public override void Die()
     {   
         EntityManager.RemoveEntity(this);

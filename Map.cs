@@ -28,7 +28,7 @@ public static class Map
 
             for (int x=0; x<width; x++)
             {
-                char apparence = VerifyEntitys(x, y);
+                string apparence = VerifyEntitys(x, y);
                 
                 Console.Write(apparence);
             }
@@ -50,21 +50,18 @@ public static class Map
         IsMapDraw=true;
     }
 
-    public static char VerifyEntitys(int x, int y)
+    public static string VerifyEntitys(int x, int y)
     {
         // verify the entitys in map and put them in their positions
     
         foreach (var entity in EntityManager.EntityList)
         {   
-            if (!entity.isDead)
+            if (entity.PosX == x && entity.PosY == y)
             {
-                if (entity.PosX == x && entity.PosY == y)
-                {
-                    return entity.Apparence;
-                }
+                return $"{entity.StateColor}{entity.Apparence}{ConsoleHelper.ResetColor}";
             }
         }
 
-        return theme;
+        return theme.ToString();
     }
 }

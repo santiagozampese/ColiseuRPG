@@ -15,6 +15,9 @@ public class Entity
 
     public char Apparence {get; set;}
 
+    public string State { get; set; } = "Alive";
+    
+    public string? StateColor { get; set; } = "";
 
     public Entity()
     {   
@@ -29,11 +32,18 @@ public class Entity
         }
     }
 
-    public void VerifyDead()
+    public virtual void VerifyDead()
     {
-        if (this.Life<=0)
+        if (Life<=0)
         {
-            this.isDead=true;
+            isDead=true;
+            State="Dead";
+            StateColor=ConsoleHelper.Red;
+        }
+        else
+        {
+            State="Alive";
+            StateColor=ConsoleHelper.White; 
         }
     }
 

@@ -15,3 +15,5 @@ JumpingSlime se divide em menores ao morrer
 É possível subir de nível derrotar inimigos
 
 inimigos sobem de nível ao progresso do jogo
+
+Use F5 para salvar, F9 para carregar e Delete para deletar o save

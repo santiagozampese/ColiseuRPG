@@ -68,7 +68,8 @@ public class JumpingSlime : Enemy
                 int newX = this.PosX - offset;
                 if (newX>=0 && !EntityManager.IsPositionOccupied(newX, this.PosY))
                 {
-                    new JumpingSlime(true) {PosX=newX, PosY=this.PosY, Level=this.Level};
+                    JumpingSlime slime = new JumpingSlime(true) {PosX=newX, PosY=this.PosY, Level=this.Level};
+                    slime.VerifyDead();
                     break;
                 }
             }
@@ -78,7 +79,8 @@ public class JumpingSlime : Enemy
                 int newX = this.PosX + offset;
                 if (newX>=0 && !EntityManager.IsPositionOccupied(newX, this.PosY))
                 {
-                    new JumpingSlime(true) {PosX=newX, PosY=this.PosY, Level=this.Level};
+                    JumpingSlime slime = new JumpingSlime(true) {PosX=newX, PosY=this.PosY, Level=this.Level};
+                    slime.VerifyDead();
                     break;
                 }
             }

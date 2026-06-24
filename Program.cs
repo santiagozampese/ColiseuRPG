@@ -76,7 +76,7 @@
 
             if (EntityManager.player.isDead || !isRunning) break;
 
-            RoundCreator.SpawnEnemies();
+            RoundCreator.SpawnEnemies(); // Place enemies
 
             EntityManager.player.mode = "Walk";
 
@@ -88,8 +88,8 @@
 
             CheckSpecialKeys(key);
 
-            EntityManager.player.Walk(key);
-            RoundCreator.SpawnEnemies();
+            EntityManager.player.Walk(key); // Walk
+            RoundCreator.SpawnEnemies(); // Check for new enemies
 
             if (EntityManager.player.isDead || !isRunning) break;
 
@@ -103,12 +103,21 @@
 
             CheckSpecialKeys(key);
 
-            EntityManager.player.Attack(key);
-            RoundCreator.SpawnEnemies();
+            EntityManager.player.Attack(key); // Attack
+            RoundCreator.SpawnEnemies(); // Check for new enemies
 
             if (EntityManager.player.isDead || !isRunning) break;
 
-            CheckEnemiesDie();
+            if (CheckEnemiesDie())
+            {
+                Map.DrawMap();
+
+                Console.SetCursorPosition(0, Map.height+(Map.height/2));
+
+                Thread.Sleep(45);
+            }
+
+            RemoveDeadEnemies();
 
             EntityManager.player.EnemysHits.Clear();
             EntityManager.player.DamageReceiveInCurrentTurn=0;
@@ -119,7 +128,7 @@
 
             RoundCreator.VerifyLevel();
            
-            EnemiesMoves();
+            EnemiesMoves(); // Enemies turn
         }
     } 
 
@@ -138,28 +147,37 @@
         }  
     }
 
-    public static void CheckEnemiesDie()
+    public static bool CheckEnemiesDie()
     {
-        if (SaveManager.IsLoading || SaveManager.IsSaving || SaveManager.IsReseting) return;
-        if (EntityManager.player == null) return;
+        if (SaveManager.IsLoading || SaveManager.IsSaving || SaveManager.IsReseting) return false;
+        if (EntityManager.player == null) return false;
 
-        foreach (Entity entity in EntityManager.EntityList)
+        bool enemieDie = false;
+
+        foreach (Enemy enemy in EntityManager.EnemyList)
         {
-            entity.VerifyDead();
+            enemy.VerifyDead();
 
-            if (entity.isDead && entity is Enemy)
+            if (enemy.isDead)
             {   
+                enemieDie=true;
                 // Give Xp for enemys Dead
-                Enemy enemy = (Enemy)entity;
                 if (enemy.GiveXp)
                 {                      
-                    EntityManager.player.xp+=(EntityManager.player.xpValue*entity.Level)+enemy.BonusXp;
+                    EntityManager.player.xp+=(EntityManager.player.xpValue*enemy.Level)+enemy.BonusXp;
                 }
             }
+        }
+        return enemieDie;
+    }
 
-            if (entity.isDead)
+    public static void RemoveDeadEnemies()
+    {
+        foreach (Enemy enemy in EntityManager.EnemyList)
+        {
+            if (enemy.isDead)
             {
-                entity.Die();
+                enemy.Die();
             }
         }
     }

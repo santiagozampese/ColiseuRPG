@@ -33,6 +33,10 @@ public static class RoundCreator
         {
             SpawnEnemies();
             if (EntityManager.player!=null) SaveManager.SaveGame(EntityManager.player); // AutoSave
+            foreach  (Enemy enemy in EntityManager.EnemyList)
+            {
+                enemy.VerifyDead();
+            }
             roundClear = false;
         }
         
