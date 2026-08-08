@@ -78,32 +78,14 @@
 
             RoundCreator.SpawnEnemies(); // Place enemies
 
-            EntityManager.player.mode = "Walk";
-
-            Map.DrawMap();
-
-            Console.SetCursorPosition(0, Map.height+(Map.height/2));
-
-            var key = Console.ReadKey(true).Key;
-
-            CheckSpecialKeys(key);
-
-            EntityManager.player.Walk(key); // Walk
+            Walk();
+            
             RoundCreator.SpawnEnemies(); // Check for new enemies
 
             if (EntityManager.player.isDead || !isRunning) break;
 
-            EntityManager.player.mode = "Attack";
+            Attack();
 
-            Map.DrawMap();
-
-            Console.SetCursorPosition(0, Map.height+(Map.height/2));
-
-            key = Console.ReadKey(true).Key;
-
-            CheckSpecialKeys(key);
-
-            EntityManager.player.Attack(key); // Attack
             RoundCreator.SpawnEnemies(); // Check for new enemies
 
             if (EntityManager.player.isDead || !isRunning) break;
@@ -132,6 +114,36 @@
         }
     } 
 
+    private static void Attack()
+    {
+        EntityManager.player.mode = "Attack";
+
+        Map.DrawMap();
+
+        Console.SetCursorPosition(0, Map.height+(Map.height/2));
+
+        var key = Console.ReadKey(true).Key;
+
+        if (CheckSpecialKeys(key)) Attack();
+
+        EntityManager.player.Attack(key); // Attack
+    }
+
+    private static void Walk()
+    {
+        EntityManager.player.mode = "Walk";
+
+        Map.DrawMap();
+
+        Console.SetCursorPosition(0, Map.height+(Map.height/2));
+
+        var key = Console.ReadKey(true).Key;
+
+        if (CheckSpecialKeys(key)) Walk();
+
+        EntityManager.player.Walk(key); // Walk
+            
+    }
     public static void EnemiesMoves()
     {
         if (SaveManager.IsLoading || SaveManager.IsSaving || SaveManager.IsReseting) return;
@@ -182,9 +194,9 @@
         }
     }
 
-    public static void CheckSpecialKeys(ConsoleKey key)
+    public static bool CheckSpecialKeys(ConsoleKey key)
     {
-        if (EntityManager.player==null) return;
+        if (EntityManager.player==null) return false;
 
         if (key==SaveManager.saveKey)
         {
@@ -192,6 +204,7 @@
             Console.Clear();
             Map.DrawMap();
             InfoManager.ShowInfo();
+            return true;
         }
         else if (key==SaveManager.loadKey)
         {
@@ -199,12 +212,15 @@
             Console.Clear();
             Map.DrawMap();
             InfoManager.ShowInfo();
+            return true;
         }
         else if (key==SaveManager.resetKey)
         {
             SaveManager.DeleteSave();
             Console.Clear();
             EntityManager.player.Die();
+            return true;
         }
+        return false;
     }
 }
