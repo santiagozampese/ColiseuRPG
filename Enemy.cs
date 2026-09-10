@@ -13,6 +13,9 @@ public class Enemy : Entity
     public int RoundAttackCount {get; set;}
     public int RoundSpecialCount {get; set;}
 
+    public bool HasAttack = true;
+    public bool HasSpecial = false;
+
     public Enemy()
     {
         this.Damage = this.BaseDamage*this.Level;
@@ -66,14 +69,10 @@ public class Enemy : Entity
 
     public override void VerifyDead()
     {
-        if (Life<=0)
-        {
-            isDead=true;
-            State="Dead";
-            StateColor=ConsoleHelper.Red;
-        }
-
         if (EntityManager.player==null) return;
+
+        if (Life <= 0) isDead = true;
+
         else if (EntityManager.player.Damage>=Life)
         {
             State="LowLife"; 
@@ -86,9 +85,19 @@ public class Enemy : Entity
             StateColor=ConsoleHelper.White; 
         }
 
+        if ((RoundsToAttack - RoundAttackCount) == 1)
+        {
+            State="Attack";
+            StateColor=ConsoleHelper.Red;
+        }
+
+        if ((RoundsToSpecial- RoundSpecialCount) == 1)
+        {
+            State="Special";
+            StateColor=ConsoleHelper.Blue;
+        }
     }
     
-
     public override void Die()
     {   
         EntityManager.RemoveEntity(this);
@@ -162,16 +171,15 @@ public class Enemy : Entity
                 case "down": this.GoDown(); break;
                 case "up": this.GoUp(); break;
             }
-
         }
-
-
     }
 
     public virtual void Special(){}
 
     public virtual void Attack()
     {   
+        if (!HasAttack) return;
+
         Player? player = EntityManager.player;
 
         if (player == null)

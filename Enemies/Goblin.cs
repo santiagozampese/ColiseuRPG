@@ -18,5 +18,7 @@ public class Goblin : Enemy
 
         Damage = BaseDamage;
 
+        HasAttack = true;
+        HasSpecial = false;
     }
 }

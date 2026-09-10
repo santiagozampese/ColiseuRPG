@@ -178,6 +178,7 @@
                 {                      
                     EntityManager.player.xp+=(EntityManager.player.xpValue*enemy.Level)+enemy.BonusXp;
                 }
+                EntityManager.DeadEnemiesQueue.Add(enemy);
             }
         }
         return enemieDie;
@@ -185,12 +186,9 @@
 
     public static void RemoveDeadEnemies()
     {
-        foreach (Enemy enemy in EntityManager.EnemyList)
+        foreach (Enemy enemy in EntityManager.DeadEnemiesQueue)
         {
-            if (enemy.isDead)
-            {
-                enemy.Die();
-            }
+            enemy.Die();
         }
     }
 

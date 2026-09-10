@@ -15,7 +15,9 @@ public class Archer : Enemy
         Range = 5;
 
         TotalLife = BaseLife;
-       
+
+        HasAttack = true;
+        HasSpecial = false;
     }
 
      public override void WalkToPlayer()

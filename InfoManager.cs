@@ -1,3 +1,5 @@
+using System.Text;
+
 public static class InfoManager
 {   
     public static string? playerInfo;
@@ -6,17 +8,21 @@ public static class InfoManager
         if (EntityManager.player == null) return;
 
         int? plusHits = 0;
-        Func<List<(Enemy enemy, double damage)>, string> HitsString = x =>{
+        Func<List<(Enemy enemy, double damage)>, string> HitsString = x =>
+        {
             if (x==null) return "";
-            string? text="";
-            for (int j=0; j<x.Count; j++)
+            var hits = x.ToList();
+            StringBuilder text = new();
+
+            int counter = 0;
+            foreach (var hit in hits)
             {   
                 if (x.Count==0) break;
-                text+=$"{x.ToList()[j].enemy.GetType()} - {x.ToList()[j].damage}\n";
-                if (j>=4) plusHits=x.Count-4;
+                text.Append($"{hit.enemy.GetType()} - {hit.damage}");
+                text.AppendLine();
+                if (counter >= 4) plusHits=x.Count-4;
             }
-            if (text!="") text="Enemys Damage - " + text;
-            return text;
+            return text.ToString();
         };
 
         Func<int?, string> plusHitsString = x =>
@@ -26,7 +32,6 @@ public static class InfoManager
 
         };
 
-        
         Console.SetCursorPosition(0, Map.height+4);
 
         string playerInfo = $"""
@@ -64,7 +69,11 @@ public static class InfoManager
             {
                 List<string> enemyInfo = new();
 
-                enemyInfo = [$"Type - {enemy.GetType()}", $"Life - {(int?)enemy.Life}", $"Damage - {(int?)enemy.Damage}", $"Level- {enemy.Level}", $"Range - {enemy.Range}", $"Attack in - {enemy.RoundsToAttack-enemy.RoundAttackCount}", $"Special in - {enemy.RoundsToSpecial-enemy.RoundSpecialCount}"];
+                enemyInfo = [$"Type - {enemy.GetType()}", $"Life - {(int?)enemy.Life}",
+                $"Damage - {(int?)enemy.Damage}", $"Level- {enemy.Level}",
+                $"Range - {enemy.Range}",
+                (enemy.HasAttack ? $"Attack in - {enemy.RoundsToAttack-enemy.RoundAttackCount}" : ""),
+                (enemy.HasSpecial ? $"Special in - {enemy.RoundsToSpecial-enemy.RoundSpecialCount}" : "")];
 
                 int j=0;
                 foreach (var info in enemyInfo)
@@ -72,8 +81,11 @@ public static class InfoManager
                     if (Map.width+(14*i)+2 < Console.WindowWidth)
                     {
                         Console.SetCursorPosition(Map.width+(14*i)+2, j);
-                        Console.Write(info);  
-                        j++;           
+                        if (!string.IsNullOrWhiteSpace(info))
+                        {                        
+                            Console.Write(info);  
+                            j++;           
+                        }
                     }
                     else
                     {

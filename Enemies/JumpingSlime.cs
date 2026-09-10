@@ -1,26 +1,6 @@
 public class JumpingSlime : Enemy
 {   
     public bool IsChild {get; set;} = false;
-    public JumpingSlime()
-    {
-        Apparence = 'J';
-
-        BonusXp = 10;
-
-        RoundsToAttack = 2;
-
-        BaseDamage = 6;
-
-        BaseLife = 40;
-
-        Range = 1;
-
-        TotalLife = BaseLife;
-
-        Damage = BaseDamage;
-
-    }
-
     public JumpingSlime(bool isChild)
     {   
         IsChild=isChild;
@@ -55,6 +35,9 @@ public class JumpingSlime : Enemy
         Damage = BaseDamage;
 
         this.SetAttributes();
+
+        HasAttack = true;
+        HasSpecial = false;
     }
 
     public override void Die()
@@ -84,6 +67,8 @@ public class JumpingSlime : Enemy
                     break;
                 }
             }
+            EntityManager.EnemyList.Remove(this);
+            EntityManager.DeadEnemiesQueue.Remove(this);
         }
     }
 

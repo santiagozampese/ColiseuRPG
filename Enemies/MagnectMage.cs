@@ -21,6 +21,8 @@ public class MagnectMage : Enemy
 
         Damage = BaseDamage;
 
+        HasAttack = true;
+        HasSpecial = true;
     }
 
     public override void Special()

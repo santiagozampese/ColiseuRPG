@@ -19,6 +19,9 @@ public class Summoner : Enemy
         Range = 1;
 
         TotalLife = BaseLife;
+
+        HasAttack = false;
+        HasSpecial = true;
     }
 
     public override void Special()

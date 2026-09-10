@@ -3,6 +3,7 @@ public static class EntityManager
     public static HashSet<Entity> EntityList = new();
 
     public static HashSet<Enemy> NotSpawnedEnemys = new();
+    public static HashSet<Enemy> DeadEnemiesQueue = new();
 
     public static Player? player {get; set;}
 

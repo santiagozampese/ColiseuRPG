@@ -15,7 +15,7 @@ public static class RoundCreator
     private static RoundedEnemy archer = new((a, b) => new Archer{Level=r.Next(a, b)});
     private static RoundedEnemy summoner = new((a, b) => new Summoner{Level=r.Next(a, b)});
     private static RoundedEnemy magnectMage = new((a, b) => new MagnectMage{Level=r.Next(a, b)});
-    private static RoundedEnemy jumpingSlime = new((a, b) => new JumpingSlime{Level=r.Next(a, b)});
+    private static RoundedEnemy jumpingSlime = new((a, b) => new JumpingSlime(false) {Level=r.Next(a, b)});
     public static bool roundClear = false;
 
     public static void VerifyLevel()
