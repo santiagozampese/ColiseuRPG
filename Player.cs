@@ -112,7 +112,7 @@ public class Player : Entity
             case ConsoleKey.W:
                 foreach (Enemy enemy in EntityManager.EnemyList)
                 {
-                    if (EntityManager.VerifyUp(this, enemy, 1) && !SamePos(enemy))
+                    if (EntityManager.VerifyDirection(this, enemy, 1, 0, -1) && !SamePos(enemy))
                     {
                         enemy.Life-=this.Damage;
                     }
@@ -122,7 +122,7 @@ public class Player : Entity
             case ConsoleKey.S:
                 foreach (Enemy enemy in EntityManager.EnemyList)
                 {
-                    if (EntityManager.VerifyDown(this, enemy, 1) && !SamePos(enemy))
+                    if (EntityManager.VerifyDirection(this, enemy, 1, 0, 1) && !SamePos(enemy))
                     {
                         enemy.Life-=this.Damage;
                     }        
@@ -132,7 +132,7 @@ public class Player : Entity
             case ConsoleKey.D:
                 foreach (Enemy enemy in EntityManager.EnemyList)
                 {
-                    if (EntityManager.VerifyRight(this, enemy, 1) && !SamePos(enemy))
+                    if (EntityManager.VerifyDirection(this, enemy, 1, 1, 0) && !SamePos(enemy))
                     {
                         enemy.Life-=this.Damage;
                     }
@@ -142,7 +142,7 @@ public class Player : Entity
             case ConsoleKey.A:
                 foreach (Enemy enemy in EntityManager.EnemyList)
                 {
-                    if (EntityManager.VerifyLeft(this, enemy, 1) && !SamePos(enemy))
+                    if (EntityManager.VerifyDirection(this, enemy, 1, -1, 0) && !SamePos(enemy))
                     {
                         enemy.Life-=this.Damage;
                     }

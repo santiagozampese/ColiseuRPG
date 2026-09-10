@@ -43,22 +43,22 @@ public class MagnectMage : Enemy
 
             if (EntityManager.VerifySides(this, player, SpecialRange))
             {
-                if (EntityManager.VerifyUp(this, player, SpecialRange))
+                if (EntityManager.VerifyDirection(this, player, SpecialRange, 0, -1))
                 {
                     player.PosY++;
                 }
 
-                if (EntityManager.VerifyDown(this, player, SpecialRange))
+                if (EntityManager.VerifyDirection(this, player, SpecialRange, 0, 1))
                 {
                     player.PosY--;
                 }
 
-                if (EntityManager.VerifyRight(this, player, SpecialRange))
+                if (EntityManager.VerifyDirection(this, player, SpecialRange, 1, 0))
                 {
                     player.PosX--;
                 }
 
-                if (EntityManager.VerifyLeft(this, player, SpecialRange))
+                if (EntityManager.VerifyDirection(this, player, SpecialRange, -1, 0))
                 {
                     player.PosX++;
                 }

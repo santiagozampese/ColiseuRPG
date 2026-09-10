@@ -4,8 +4,8 @@ public class RoundedEnemy
     public bool CanSpawn {get; set;} = false;
     public int MinLevel {get; set;} = 1;
     public int MaxLevel {get; set;} = 1;
-    public Action<int, int> Spawn {get; set;}
-    public RoundedEnemy(Action<int, int> method)
+    public Func<int, int, Enemy> Spawn {get; set;}
+    public RoundedEnemy(Func<int, int, Enemy> method)
     {   
         Spawn=method;
         RoundCreator.RoundedEnemys.Add(this);

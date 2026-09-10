@@ -33,50 +33,12 @@ public static class EntityManager
         return (dx <= distance && dy == 0) || (dy <= distance && dx == 0);
     }
 
-    public static bool VerifyRight(Entity entity, Entity target, int distance)
+    public static bool VerifyDirection(Entity source, Entity target, int distance, int dirX, int dirY)
     {
-        if (target?.PosX-entity.PosX<=distance && target?.PosX>=entity.PosX && entity.PosY==target?.PosY)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public static bool VerifyLeft(Entity entity, Entity target, int distance)
-    {
-        if (target?.PosX-entity.PosX>=-distance && target?.PosX<=entity.PosX && entity.PosY==target?.PosY)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    public static bool VerifyUp(Entity entity, Entity target, int distance)
-    {
-        if (target?.PosY-entity.PosY>=-distance && target?.PosY<=entity.PosY && entity.PosX==target?.PosX)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    public static bool VerifyDown(Entity entity, Entity target, int distance)
-    {
-        if (target?.PosY-entity.PosY<=distance && target?.PosY>=entity.PosY && entity.PosX==target?.PosX)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        if (target == null) return false;
+        int dx = target.PosX - source.PosX;
+        int dy = target.PosY - source.PosY;
+        return (Math.Sign(dx) == dirX && Math.Abs(dx) <= distance && dy == 0) || (Math.Sign(dy) == dirY && Math.Abs(dy) <= distance && dx == 0);
     }
     public static void AddEntity(Entity entity)
     {

@@ -49,6 +49,7 @@ public class JumpingSlime : Enemy
                 if (newX>=0 && !EntityManager.IsPositionOccupied(newX, this.PosY))
                 {
                     JumpingSlime slime = new JumpingSlime(true) {PosX=newX, PosY=this.PosY, Level=this.Level};
+                    EntityManager.NotSpawnedEnemys.Add(slime);
                     slime.VerifyDead();
                     break;
                 }
@@ -60,6 +61,7 @@ public class JumpingSlime : Enemy
                 if (newX>=0 && !EntityManager.IsPositionOccupied(newX, this.PosY))
                 {
                     JumpingSlime slime = new JumpingSlime(true) {PosX=newX, PosY=this.PosY, Level=this.Level};
+                    EntityManager.NotSpawnedEnemys.Add(slime);
                     slime.VerifyDead();
                     break;
                 }

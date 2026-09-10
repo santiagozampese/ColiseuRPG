@@ -6,6 +6,9 @@
 # Game Data
 .savegame.json
 
+# vscode
+*.vscode
+
 # dotenv files
 .env
 
