@@ -138,12 +138,15 @@ public static class SaveManager
             enemy.Life = enemyData.Life;
             enemy.PosX = enemyData.PosX;
             enemy.PosY = enemyData.PosY;
-            enemy.RoundAttackCount = enemyData.RoundAttackCount;
-            enemy.RoundSpecialCount = enemyData.RoundSpecialCount;
             enemy.GiveXp = enemyData.GiveXp;
 
             enemy.SetAttributes();
 
+            EntityManager.RemoveNotSpawnedEnemy(enemy);
+
+            enemy.RoundAttackCount = enemyData.RoundAttackCount;
+            enemy.RoundSpecialCount = enemyData.RoundSpecialCount;
+            
             EntityManager.AddEntity(enemy);
             EntityManager.AddEnemy(enemy);
         }

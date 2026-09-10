@@ -1,7 +1,7 @@
 public class JumpingSlime : Enemy
 {   
     public bool IsChild {get; set;} = false;
-    public JumpingSlime(bool isChild)
+    public JumpingSlime(bool isChild=false)
     {   
         IsChild=isChild;
 
@@ -33,9 +33,6 @@ public class JumpingSlime : Enemy
         TotalLife = BaseLife;
 
         Damage = BaseDamage;
-
-        this.SetAttributes();
-
         HasAttack = true;
         HasSpecial = false;
     }

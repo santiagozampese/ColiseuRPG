@@ -8,7 +8,7 @@ public class MagnectMage : Enemy
 
         RoundsToAttack = 3;
 
-        RoundsToSpecial=4;
+        RoundsToSpecial = 4;
 
         BaseDamage = 8;
 

@@ -10,11 +10,11 @@ public class Enemy : Entity
     public int SpecialRange {get; set;} = 1;
 
     public double BonusXp {get; set;} = 0;
-    public int RoundAttackCount {get; set;}
-    public int RoundSpecialCount {get; set;}
+    public int RoundAttackCount {get; set;} = 0;
+    public int RoundSpecialCount {get; set;} = 0;
 
-    public bool HasAttack = true;
-    public bool HasSpecial = false;
+    public bool HasAttack {get; set;} = true;
+    public bool HasSpecial {get; set;} = false;
 
     public Enemy()
     {
@@ -30,14 +30,11 @@ public class Enemy : Entity
         PosX = r.Next(1, Map.width-1);
         PosY = r.Next(1, Map.height-1);
 
-        SetAttributes();
         EntityManager.AddNotSpawnedEnemy(this);
-
     }
 
     public Enemy(int x, int y)
     {
-
         this.Damage = this.BaseDamage*this.Level;
 
         if (this.BaseLife*this.Level>this.TotalLife)
@@ -50,9 +47,9 @@ public class Enemy : Entity
         PosX = x;
         PosY = y;
 
-        SetAttributes();
-        EntityManager.AddNotSpawnedEnemy(this);
+        VerifyDead();
 
+        EntityManager.AddNotSpawnedEnemy(this);
     }
     public void SetAttributes()
     {
@@ -65,6 +62,9 @@ public class Enemy : Entity
         }
 
         this.Life = this.TotalLife;
+
+        RoundAttackCount = r.Next(0, Math.Max(1, RoundsToAttack));
+        RoundSpecialCount = r.Next(0, Math.Max(1, RoundsToSpecial));
     }
 
     public override void VerifyDead()
