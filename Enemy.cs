@@ -28,8 +28,6 @@ public class Enemy : Entity
         PosY = r.Next(1, Map.height-1);
 
         SetAttributes();
-        EntityManager.AddNotSpawnedEnemy(this);
-
     }
 
     public Enemy(int x, int y)
@@ -48,8 +46,6 @@ public class Enemy : Entity
         PosY = y;
 
         SetAttributes();
-        EntityManager.AddNotSpawnedEnemy(this);
-
     }
     public void SetAttributes()
     {

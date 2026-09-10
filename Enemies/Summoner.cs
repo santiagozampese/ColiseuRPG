@@ -62,6 +62,7 @@ public class Summoner : Enemy
             if (newX>=0 && newX < Map.width)    
             {
                 Goblin goblin = new Goblin{Level=r.Next(1, this.Level+1), PosX=newX, PosY=this.PosY, GiveXp=false};
+                EntityManager.NotSpawnedEnemys.Add(goblin);
             }
         }
         else

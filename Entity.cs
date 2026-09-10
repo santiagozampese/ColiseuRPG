@@ -4,7 +4,7 @@ public class Entity
     public int PosX {get; set;}
     public int PosY {get; set;}
 
-    public bool CanWalk = true;
+    public bool CanWalk {get; set;} = true;
     public int Level {get; set;} = 1;
 
     public double BaseLife {get; set;}

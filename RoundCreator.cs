@@ -6,8 +6,6 @@ public static class RoundCreator
     public static int Turn {get; set;} = 1;
 
     public static int EnemysCount = 0;
-
-
     public static int EnemysAmount {get; set;}
 
     public static List<RoundedEnemy> RoundedEnemys = new();
@@ -38,8 +36,7 @@ public static class RoundCreator
                 enemy.VerifyDead();
             }
             roundClear = false;
-        }
-        
+        } 
     }
 
     public static void SpawnEnemies()
@@ -55,17 +52,16 @@ public static class RoundCreator
         ChooseEnemyAmount();
         ChooseEnemys();
         
+        
+        if (EntityManager.player?.Life+(EntityManager.player?.TotalLife*10/100)>EntityManager.player?.TotalLife)
         {
-            if (EntityManager.player?.Life+(EntityManager.player?.TotalLife*10/100)>EntityManager.player?.TotalLife)
-            {
-                EntityManager.player.Life=EntityManager.player.TotalLife;
-            }
-            else
-            {
-                EntityManager.player?.Life+=EntityManager.player.TotalLife*10/100;
-            }
+            EntityManager.player.Life=EntityManager.player.TotalLife;
         }
-
+        else
+        {
+            EntityManager.player?.Life+=EntityManager.player.TotalLife*10/100;
+        }
+        
         for (int i=0; i<EnemysAmount;)
         {   
             if (EntityManager.EnemyList.Count>=EntityManager.MaxEnemys)
@@ -76,7 +72,7 @@ public static class RoundCreator
             RoundedEnemy enemy = RoundedEnemys[index];
             if (enemy.CanSpawn)
             {
-                enemy.Spawn(enemy.MinLevel, enemy.MaxLevel+1);
+                EntityManager.NotSpawnedEnemys.Add(enemy.Spawn(enemy.MinLevel, enemy.MaxLevel+1));
                 i++;
             }
         }

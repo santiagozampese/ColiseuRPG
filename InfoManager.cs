@@ -9,12 +9,11 @@ public static class InfoManager
         Func<List<(Enemy enemy, double damage)>, string> HitsString = x =>{
             if (x==null) return "";
             string? text="";
-            for (int j=0; j<x.Count; j++)
+            foreach (var hit in x)
             {   
-                if (x.Count==0) break;
-                text+=$"{x.ToList()[j].enemy.GetType()} - {x.ToList()[j].damage}\n";
-                if (j>=4) plusHits=x.Count-4;
+                text+=$"{hit.enemy.GetType().Name} - {hit.damage}\n";
             }
+            plusHits=x.Count-4;
             if (text!="") text="Enemys Damage - " + text;
             return text;
         };
